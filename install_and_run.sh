@@ -20,11 +20,17 @@ for pkg in "${REQUIRED_PACKAGES[@]}"; do
 done
 
 echo "Checking Python dependencies..."
-# Install required Python packages system-wide
+# Create a virtual environment if not exists
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
+source venv/bin/activate
+
+# Install required Python packages
 for pkg in "${PYTHON_PACKAGES[@]}"; do
     if ! pip show $pkg &> /dev/null; then
         echo "$pkg not found, installing..."
-        pip install --upgrade $pkg
+        pip install $pkg
     else
         echo "$pkg is already installed."
     fi
